@@ -4,8 +4,12 @@
   "description": "Create an ECS launch from a stack file",
   "main": "lib/index.js",
   "scripts": {
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "files": [
+    "lib"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danm/stack-deploy-ecs.git"
