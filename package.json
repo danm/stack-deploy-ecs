@@ -1,0 +1,37 @@
+{
+  "name": "stack-deploy-ecs",
+  "version": "1.0.0",
+  "description": "Create an ECS launch from a stack file",
+  "main": "lib/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/danm/stack-deploy-ecs.git"
+  },
+  "author": "Daniel Morrison <daniel.morrison@bbc.co.uk>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/danm/stack-deploy-ecs/issues"
+  },
+  "homepage": "https://github.com/danm/stack-deploy-ecs#readme",
+  "devDependencies": {
+    "@babel/core": "^7.10.3",
+    "@babel/preset-env": "^7.10.3",
+    "@babel/preset-typescript": "^7.10.1",
+    "@typescript-eslint/eslint-plugin": "^3.4.0",
+    "@typescript-eslint/parser": "^3.4.0",
+    "babel-jest": "^26.0.1",
+    "eslint": "^7.3.1",
+    "eslint-config-airbnb-typescript": "^8.0.2",
+    "eslint-plugin-import": "^2.21.2",
+    "jest": "^26.0.1",
+    "ts-node": "^8.10.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.702.0",
+    "commander": "^5.1.0",
+    "fast-deep-equal": "^3.1.3"
+  }
+}
