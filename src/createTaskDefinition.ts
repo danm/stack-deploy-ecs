@@ -83,9 +83,13 @@ export function compareDefs(
 ) {
   const server = old.taskDefinition;
   const local = recent;
+  const localContainer = local.containerDefinitions[0];
+  const serverContainer = server.containerDefinitions[0];
 
   if (server?.cpu !== local.cpu) return false;
   if (server?.memory !== local.memory) return false;
+  if (localContainer?.image !== serverContainer.image) return false;
+  if (localContainer?.name !== serverContainer.name) return false;
 
   const orderedLocalEnv = orderArray(local.containerDefinitions[0].environment, 'name');
   const orderedLocalSec = orderArray(local.containerDefinitions[0].secrets, 'name');
@@ -160,12 +164,17 @@ export function createTaskDefFromStack(
 async function taskDefinition(opts: IStack, name: string, env: ENV) {
   const tranformation = {
     clusterName: `${opts.stack}-${opts.type}-${env}`,
-    imageName: `${opts[env].aws}.dkr.ecr.${opts[env].region}.amazonaws.com/${opts.stack}-${opts.type}-${env}/${name}`,
+    imageName: `${opts[env].aws}.dkr.ecr.${opts[env].region}.amazonaws.com/${opts.stack}-${opts.type}/${name}`,
     taskFamily: `${opts.stack}-${opts.type}-${env}-${name}`,
   } as ITransformation;
 
   const taskDef = createTaskDefFromStack(tranformation, opts, name, env);
-  const oldTaskDef = await describeTaskDef(tranformation.taskFamily);
+  let oldTaskDef;
+  try {
+    oldTaskDef = await describeTaskDef(tranformation.taskFamily);
+  } catch (e) {
+    console.log('No previous version of the task def found');
+  }
 
   if (!oldTaskDef) {
     console.log('Previous version of task def not found, registering a new one,');

@@ -1,6 +1,6 @@
 {
   "name": "stack-deploy-ecs",
-  "version": "1.0.0",
+  "version": "1.0.5",
   "description": "Create an ECS launch from a stack file",
   "main": "lib/index.js",
   "scripts": {
@@ -10,6 +10,9 @@
   "files": [
     "lib"
   ],
+  "bin": {
+    "stack-deploy-ecs": "lib/cli.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/danm/stack-deploy-ecs.git"

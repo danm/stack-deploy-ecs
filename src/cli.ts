@@ -1,5 +1,5 @@
-#!/usr/bin/env node --max_old_space_size=8192 -r ts-node/register
-// #!/usr/bin/env node --max_old_space_size=8192
+#!/usr/bin/env node
+// #!/usr/bin/env node -r ts-node/register
 
 import { program } from 'commander';
 import main from './index';
@@ -10,11 +10,11 @@ program
   .option('-e, --env <env>', 'environment to build', 'test')
   .action((a, b) => {
     try {
-      main(a, b.file, b.env)
+      console.log('running version 1.0.5');
+      main(a, b.file, b.env);
     } catch (e) {
       console.log(e.message);
     }
   });
 
 program.parse(process.argv);
-
