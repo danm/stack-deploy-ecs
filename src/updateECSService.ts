@@ -34,6 +34,7 @@ function updateService(opts: IStack, name: string, env: ENV) {
       cluster: `${opts.stack}-${opts.type}-${env}`,
       service: `${name}-${env}`,
       desiredCount: opts[env].desiredCount,
+      forceNewDeployment: true
     };
     ecs.updateService(params, (err, res) => {
       if (err) reject(err);
