@@ -9,7 +9,7 @@ const ecs = new aws.ECS({
 function createService(opts: IStack, name: string, env: ENV) {
   return new Promise((resolve, reject) => {
     const params: aws.ECS.CreateServiceRequest = {
-      cluster: `${opts.stack}-${opts.type}-${env}`,
+      cluster: env === 'live' ? `${opts.stack}-${opts.type}` : `${opts.stack}-${opts.type}-${env}`,
       serviceName: `${name}-${env}`,
       taskDefinition: `${opts.stack}-${opts.type}-${env}-${name}`,
       desiredCount: opts[env].desiredCount,
@@ -34,7 +34,7 @@ function updateService(opts: IStack, name: string, env: ENV) {
     const latestTaskDef = await describeTaskDef(taskFamily);
     const taskRevision = latestTaskDef.taskDefinition?.revision;
     const params: aws.ECS.UpdateServiceRequest = {
-      cluster: `${opts.stack}-${opts.type}-${env}`,
+      cluster: env === 'live' ? `${opts.stack}-${opts.type}` : `${opts.stack}-${opts.type}-${env}`,
       service: `${name}-${env}`,
       desiredCount: opts[env].desiredCount,
       taskDefinition: `${taskFamily}:${taskRevision}`,
