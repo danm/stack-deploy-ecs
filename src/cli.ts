@@ -11,7 +11,7 @@ program
   .option('-t, --tag <tag>', 'image tag', 'latest')
   .action((a, b) => {
     try {
-      console.log('running version 1.0.9');
+      console.log('running version 1.0.10');
       main(a, b.file, b.env, b.tag);
     } catch (e) {
       console.log(e.message);
