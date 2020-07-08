@@ -1,5 +1,5 @@
 import aws from 'aws-sdk';
-import { IStack, ENV } from './createTaskDefinition';
+import { IStack, ENV, describeTaskDef } from './createTaskDefinition';
 
 const ecs = new aws.ECS({
   apiVersion: '2014-11-13',
@@ -29,11 +29,15 @@ function createService(opts: IStack, name: string, env: ENV) {
 }
 
 function updateService(opts: IStack, name: string, env: ENV) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
+    const taskFamily = `${opts.stack}-${opts.type}-${env}-${name}`;
+    const latestTaskDef = await describeTaskDef(taskFamily);
+    const taskRevision = latestTaskDef.taskDefinition?.revision;
     const params: aws.ECS.UpdateServiceRequest = {
       cluster: `${opts.stack}-${opts.type}-${env}`,
       service: `${name}-${env}`,
       desiredCount: opts[env].desiredCount,
+      taskDefinition: `${taskFamily}:${taskRevision}`,
       forceNewDeployment: true
     };
     ecs.updateService(params, (err, res) => {

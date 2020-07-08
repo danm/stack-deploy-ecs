@@ -169,11 +169,11 @@ async function taskDefinition(opts: IStack, name: string, env: ENV) {
   } as ITransformation;
 
   const taskDef = createTaskDefFromStack(tranformation, opts, name, env);
-  console.log(`newly created taskDef: ${taskDef}`);
+
   let oldTaskDef;
   try {
     oldTaskDef = await describeTaskDef(tranformation.taskFamily);
-    console.log(`oldTaskDef: ${oldTaskDef}`);
+
   } catch (e) {
     console.log('No previous version of the task def found');
   }

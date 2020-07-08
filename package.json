@@ -1,6 +1,6 @@
 {
   "name": "stack-deploy-ecs",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Create an ECS launch from a stack file",
   "main": "lib/index.js",
   "scripts": {
