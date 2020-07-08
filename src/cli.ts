@@ -8,10 +8,11 @@ program
   .arguments('<name>')
   .option('-f, --file <file>', 'location ', '.')
   .option('-e, --env <env>', 'environment to build', 'test')
+  .option('-t, --tag <tag>', 'image tag', 'latest')
   .action((a, b) => {
     try {
-      console.log('running version 1.0.5');
-      main(a, b.file, b.env);
+      console.log('running version 1.0.9');
+      main(a, b.file, b.env, b.tag);
     } catch (e) {
       console.log(e.message);
     }

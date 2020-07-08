@@ -161,15 +161,19 @@ export function createTaskDefFromStack(
   return params;
 }
 
-async function taskDefinition(opts: IStack, name: string, env: ENV) {
+async function taskDefinition(opts: IStack, name: string, env: ENV, tag: string) {
   const tranformation = {
     clusterName: `${opts.stack}-${opts.type}-${env}`,
-    imageName: `${opts[env].aws}.dkr.ecr.${opts[env].region}.amazonaws.com/${opts.stack}-${opts.type}/${name}`,
+    imageName: `${opts[env].aws}.dkr.ecr.${opts[env].region}.amazonaws.com/${opts.stack}-${opts.type}/${name}:${tag}`,
     taskFamily: `${opts.stack}-${opts.type}-${env}-${name}`,
   } as ITransformation;
 
   const taskDef = createTaskDefFromStack(tranformation, opts, name, env);
-
+  if (env === 'live') {
+    console.log('register new task def with latest of specific tag for live promotion');
+    await registerTaskDef(taskDef);
+    return;
+  }
   let oldTaskDef;
   try {
     oldTaskDef = await describeTaskDef(tranformation.taskFamily);
