@@ -14,6 +14,7 @@ export interface IEnvStack {
   memory: number;
   desiredCount: number;
   cron?: string;
+  cronName?: string;
   env: IEnvVar[],
   subnets: string[],
   securityGroups: string[],
@@ -171,6 +172,11 @@ async function taskDefinition(opts: IStack, name: string, env: ENV, tag: string)
   const taskDef = createTaskDefFromStack(tranformation, opts, name, env);
   if (env === 'live') {
     console.log('register new task def with latest of specific tag for live promotion');
+    await registerTaskDef(taskDef);
+    return;
+  }
+  if (opts[env].cron) {
+    console.log('register new task def for crons');
     await registerTaskDef(taskDef);
     return;
   }
