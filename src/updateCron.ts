@@ -1,7 +1,7 @@
 import aws from 'aws-sdk';
 import { IStack, ENV, describeTaskDef } from './createTaskDefinition';
 
-const eventbridge = new aws.EventBridge();
+const eventbridge = new aws.EventBridge({ apiVersion: '2015-10-07', region: 'eu-west-1' });
 function createCronEvent(opts: IStack, name: string, env: ENV) {
   return new Promise(async (resolve, reject) => {
     const params: aws.EventBridge.PutRuleRequest = {
