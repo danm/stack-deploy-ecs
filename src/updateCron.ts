@@ -47,8 +47,11 @@ function updateCronEvent(opts: IStack, name: string, env: ENV) {
         ]
     }
     eventbridge.putTargets(params, (err, res) => {
-      if (err) reject(err);
-      else resolve(res);
+      if (err) {
+        console.log(`failed puting targets ${err}`)
+        reject(err)
+      }
+      else { resolve(res) };
     });
   });
 }
@@ -59,6 +62,7 @@ async function updateCron(opts: IStack, name: string, env: ENV) {
     console.log('cron updated');
     return res;
   } catch (e) {
+    console.log(`error updating cron ${e}`)
     if (e.statusCode === 400) {
       console.log('cron not found, trying to create it...');
     } else {
