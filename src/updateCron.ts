@@ -6,7 +6,8 @@ function createCronEvent(opts: IStack, name: string, env: ENV) {
   return new Promise(async (resolve, reject) => {
     const params: aws.EventBridge.PutRuleRequest = {
       Name: opts[env].cronName || `${name}-cron`,
-      ScheduleExpression: "rate(30 minutes)",
+      // cron's initial value is null but this property accepts undefined
+      ScheduleExpression: opts[env].cron || undefined,
       State: "ENABLED"
     };
     eventbridge.putRule(params, (err, res) => {
@@ -60,7 +61,6 @@ async function updateCron(opts: IStack, name: string, env: ENV) {
   try {
     const res = await updateCronEvent(opts, name, env);
     console.log('cron updated');
-    return res;
   } catch (e) {
     console.log(`error updating cron ${e}`)
     if (e.statusCode === 400) {
@@ -73,7 +73,6 @@ async function updateCron(opts: IStack, name: string, env: ENV) {
   try {
     await createCronEvent(opts, name, env);
     console.log('cron created');
-    return 'created';
   } catch (e) {
     console.log(e);
     return e;
