@@ -12,6 +12,7 @@
     "strict": true,
     "outDir": "lib",
     "baseUrl": ".",
+    "useUnknownInCatchVariables": false,
     "paths": {
       "*": ["node_modules/*"]
     }

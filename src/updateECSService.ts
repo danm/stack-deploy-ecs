@@ -1,13 +1,13 @@
 import aws from 'aws-sdk';
 import { IStack, ENV, describeTaskDef } from './createTaskDefinition';
 
-const ecs = new aws.ECS({
-  apiVersion: '2014-11-13',
-  region: 'eu-west-1',
-});
-
 function createService(opts: IStack, name: string, env: ENV) {
   return new Promise((resolve, reject) => {
+    const ecs = new aws.ECS({
+      apiVersion: '2014-11-13',
+      region: opts[env].region,
+    });
+
     const params: aws.ECS.CreateServiceRequest = {
       cluster: env === 'live' ? `${opts.stack}-${opts.type}` : `${opts.stack}-${opts.type}-${env}`,
       serviceName: `${name}-${env}`,
@@ -30,6 +30,11 @@ function createService(opts: IStack, name: string, env: ENV) {
 
 function updateService(opts: IStack, name: string, env: ENV) {
   return new Promise(async (resolve, reject) => {
+    const ecs = new aws.ECS({
+      apiVersion: '2014-11-13',
+      region: opts[env].region,
+    });
+
     const taskFamily = `${opts.stack}-${opts.type}-${env}-${name}`;
     const latestTaskDef = await describeTaskDef(taskFamily);
     const taskRevision = latestTaskDef.taskDefinition?.revision;
