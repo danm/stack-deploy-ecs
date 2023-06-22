@@ -21,7 +21,7 @@ function updateCronEvent(opts: IStack, name: string, env: ENV) {
     const taskFamily = `${opts.stack}-${opts.type}-${env}-${name}`;
     const latestTaskDef = await describeTaskDef(taskFamily);
     const taskRevision = latestTaskDef.taskDefinition?.revision;
-    const cluster = env === 'live' ? `${opts.stack}-${opts.type}` : `${opts.stack}-${opts.type}-${env}`;
+    const cluster = `${opts.stack}-${opts.type}`;
 
     const params: aws.EventBridge.PutTargetsRequest = {
       Rule: opts[env].cronName || `${name}-cron`,
@@ -33,7 +33,7 @@ function updateCronEvent(opts: IStack, name: string, env: ENV) {
             RoleArn: `arn:aws:iam::${opts[env].aws}:role/ecsEventsRole`,
             EcsParameters: {
               TaskDefinitionArn: `arn:aws:ecs:${opts[env].region}:${opts[env].aws}:task-definition/${taskFamily}:${taskRevision}`,
-              TaskCount: opts[env].desiredCount,
+              TaskCount: opts[env].cronTaskCount || 1,
               LaunchType: "FARGATE",
               PlatformVersion: "LATEST",
               NetworkConfiguration: {
@@ -74,6 +74,9 @@ async function updateCron(opts: IStack, name: string, env: ENV) {
     await createCronEvent(opts, name, env);
     console.log('cron created');
   } catch (e) {
+    if (e.code === 'ValidationException') {
+      throw new Error('cron expression is not valid. Please double check it.')
+    }
     console.log(e);
     return e;
   }

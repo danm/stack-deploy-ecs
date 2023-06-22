@@ -15,6 +15,7 @@ export interface IEnvStack {
   desiredCount: number;
   cron?: string;
   cronName?: string;
+  cronTaskCount?: number;
   env: IEnvVar[],
   subnets: string[],
   securityGroups: string[],
